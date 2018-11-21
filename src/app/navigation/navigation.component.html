@@ -1,0 +1,32 @@
+<mat-sidenav-container class="app-container">
+
+  <mat-sidenav mode="over" #sidenav>
+    <mat-toolbar color="primary"></mat-toolbar>
+    <mat-nav-list>
+      <ng-container *ngFor="let item of headerItems">
+        <a mat-list-item [routerLink]="item.url" (click)="sidenav.close()" [ngClass]="item.className ? item.className : ''">{{item.name}}</a>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="header mat-elevation-z10">
+
+      <mat-nav-list *ngIf="!isSmallScreen()">
+        <ng-container *ngFor="let item of headerItems">
+          <navigation-item [props]="item"></navigation-item>
+        </ng-container>
+      </mat-nav-list>
+
+      <button mat-button *ngIf="isSmallScreen()" (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+    </mat-toolbar>
+
+    <!-- main content goes here -->
+    <router-outlet></router-outlet>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

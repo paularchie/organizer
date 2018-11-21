@@ -1,0 +1,54 @@
+<div fxLayoutAlign="center">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input matInput type="text" formControlName="firstName">
+      <mat-error *ngIf="firstName.touched && firstName.errors && firstName.errors.required">The field is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput type="text" formControlName="lastName">
+      <mat-error *ngIf="lastName.touched && lastName.errors && lastName.errors.required">The field is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Username</mat-label>
+      <input matInput type="text" formControlName="username">
+      <mat-error *ngIf="username.touched && username.errors && username.errors.required">The field is required</mat-error>
+      <mat-error *ngIf="username.errors && username.errors.duplicate">This username already
+        exists</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email">
+      <mat-error *ngIf="email.touched && email.errors && email.errors.required">The field is required</mat-error>
+      <mat-error *ngIf="email.errors && email.errors.duplicate">This email address already exists</mat-error>
+      <mat-error *ngIf="email.touched && email.errors && email.errors.pattern">Please provide
+        a valid email address</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password">
+      <mat-error *ngIf="password.touched && password.errors && password.errors.required; else errorTemplate">The field
+        is required</mat-error>
+      <ng-template #errorTemplate>
+        <mat-error *ngFor="let error of passwordSecurityErrors">{{passwordErrorMessages[error]}}</mat-error>
+      </ng-template>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Confirm Password</mat-label>
+      <input matInput type="password" formControlName="confirmPassword">
+      <mat-error *ngIf="confirmPassword.touched && confirmPassword.errors && confirmPassword.errors.required">The field
+        is required</mat-error>
+      <mat-error *ngIf="confirmPassword.errors && confirmPassword.errors.passwordMatch && !confirmPassword.errors.required">Password
+        doesn't match</mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" class="btn btn-primary float-right" type="submit" [disabled]="!form.valid">Sign
+      Up</button>
+  </form>
+</div>

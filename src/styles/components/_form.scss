@@ -1,0 +1,53 @@
+@mixin outline {
+
+  .mat-form-field-outline-start,
+  .mat-form-field-outline-gap,
+  .mat-form-field-outline-end {
+    @content;
+  }
+}
+
+// modify the Angular Material styles
+
+ .app-container {
+
+  // remove the thick border and apply theme color to the selected input
+  .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    @include outline {
+      border-width: 1px;
+      color: $theme-color;
+    }
+  }
+
+  // apply a border color for an invalid field
+  .mat-form-field-appearance-outline.mat-form-field-invalid {
+    @include outline {
+      color: #f44336;
+    }
+  }
+
+  // adjust input height
+  .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.7em;
+    margin-top: -.5em;
+  }
+
+  .mat-form-field-subscript-wrapper {
+    position: relative !important;
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0;
+  }
+
+  // remove the bottom padding from the last form field
+  .mat-form-field-last-child.mat-form-field-appearance-outline .mat-form-field-wrapper {
+    padding: 0;
+  }
+
+  .forgot-password-link {
+    margin-bottom: 1.5em;
+    text-align: right;
+    cursor: pointer;
+  }
+}

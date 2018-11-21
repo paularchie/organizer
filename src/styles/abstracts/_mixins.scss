@@ -1,0 +1,13 @@
+// use for mobile first
+@mixin respond-min($breakpoint) {
+  @media only screen and (min-width: $breakpoint) {
+    @content
+  }
+}
+
+// use for desktop first
+@mixin respond-max($breakpoint) {
+  @media only screen and (max-width: $breakpoint) {
+    @content
+  }
+}

@@ -1,0 +1,19 @@
+<div fxLayoutAlign="center">
+  <form [formGroup]="form" (ngSubmit)="loginAsUser()" fxLayout="column">
+
+    <mat-form-field appearance="outline">
+      <mat-label>User Email</mat-label>
+      <input matInput type="text" formControlName="userEmail" (keyup)="keyUp($event)">
+      <mat-error *ngIf="userEmail.touched && userEmail.errors && userEmail.errors.required">The field is required</mat-error>
+      <mat-error *ngIf="userEmail.errors && userEmail.errors.incorrectEmail">Incorrect email</mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" class="btn btn-primary float-right" type="submit" [disabled]="!form.valid">Login as user</button>
+  
+  </form>
+</div>
+
+
+
+
+

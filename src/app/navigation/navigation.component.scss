@@ -1,0 +1,28 @@
+.app-container {
+    height: 100%;
+}
+
+.header {
+    &.mat-toolbar {
+        height: 2.5em;
+    }
+
+    * {
+        color: white;
+    }
+
+    // sidenav list
+    mat-nav-list {
+        padding: 0;
+        display: flex;
+        width: 100%;
+    }
+
+    button[mat-button] {
+        height: 100%;
+    }
+}
+
+mat-sidenav {
+    width: 150px;
+}

@@ -1,0 +1,22 @@
+  <!-- depends on the authentication state -->
+  <ng-container *ngIf="!props.authenticationState || (props.authenticationState | async)">
+
+    <!-- if roles specified -->
+    <ng-container *ngIf="!!props.roles">
+
+      <ng-container *rbacAllow="props.roles">
+        <a mat-list-item *ngIf="props.url" [routerLink]="props.url">{{props.name}}</a>
+        <a mat-list-item *ngIf="props.clickHandler" (click)="props.clickHandler()">{{props.name}}</a>
+      </ng-container>
+
+    </ng-container>
+
+    <!-- available for all users -->
+    <ng-container *ngIf="!props.roles">
+      <a mat-list-item *ngIf="props.url" [routerLink]="props.url">{{props.name}}</a>
+      <a mat-list-item *ngIf="props.clickHandler" (click)="props.clickHandler()">{{props.name}}</a>
+    </ng-container>
+
+  </ng-container>
+
+
