@@ -24,7 +24,7 @@ export class NavigationComponent implements OnInit {
   headerItems: NavigationItemProps[] = [
     { name: 'Home', url: '/home' },
     { name: 'Users', url: '/users', roles: [UserRoles.ADMIN] },
-    { name: 'Notes', url: '/notes' },
+    { name: 'Notes', url: '/notes', authenticationState: this.isLoggedIn$ },
     { name: 'Account', url: '/account', authenticationState: this.isLoggedIn$ },
     { name: 'Admin', url: '/account/admin', roles: [UserRoles.ADMIN] },
     { name: 'Login', url: '/account/login', authenticationState: this.isLoggedOut$ },
