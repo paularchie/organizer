@@ -1,15 +1,19 @@
 import { UserRoles } from '../../../common/constants';
-
-export const PASSWORD_ERROR_MESSAGES = {
-    min: 'The minimum length is 8 characters',
-    uppercase: 'At least one upper case character',
-    lowercase: 'At least one lower case character',
-    digits: 'At least one numeric character',
-    'err_user': 'Could not create user',
-    spaces: 'Password cannot contain any spaces'
-};
+import { AuthErrorTypes } from '../auth/shared/enums/auth-error-types.enum';
+import { User } from '../../../common/models/user.model';
 
 export const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 export { UserRoles };
+
+
+export const ANONYMOUS_USER: User = {
+    id: undefined,
+    email: undefined,
+};
+
+export const UIUnknownError = {
+    type: AuthErrorTypes.UnknownError,
+    payload: null
+}
 

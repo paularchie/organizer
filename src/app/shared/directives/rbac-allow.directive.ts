@@ -1,11 +1,19 @@
-
-
-
-import { Directive, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { AppState } from '../../reducers';
+import { currentUser } from '../../auth/state/auth.selectors';
+import {
+    Directive,
+    Input,
+    OnDestroy,
+    TemplateRef,
+    ViewContainerRef
+    } from '@angular/core';
 import { intersection } from 'lodash';
-import { User } from '../models/user.model';
-import { AuthService } from '../services/auth.service';
+import { select, Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { User } from '../../../../common/models/user.model';
+
+
+
 
 @Directive({
     selector: '[rbacAllow]'
@@ -20,9 +28,11 @@ export class RbacAllowDirective implements OnDestroy {
     constructor(
         private templateRef: TemplateRef<any>,
         private viewContainer: ViewContainerRef,
-        private authService: AuthService) {
+        store: Store<AppState>) {
 
-        this.subscription = authService.user$.subscribe(
+        this.subscription = store.pipe(
+            select(currentUser)
+        ).subscribe(
             user => {
                 this.user = user;
                 this.showIfUserAllowed();

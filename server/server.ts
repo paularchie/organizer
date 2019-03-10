@@ -17,6 +17,8 @@ const cookieParser = require('cookie-parser');
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 
+// mongoose.connect('mongodb://127.0.0.1:27017', { useNewUrlParser: true });
+
 const app = express();
 
 app.use(cookieParser());

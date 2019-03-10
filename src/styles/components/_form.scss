@@ -1,53 +1,70 @@
-@mixin outline {
+@import "styles/abstracts/variables";
 
-  .mat-form-field-outline-start,
-  .mat-form-field-outline-gap,
-  .mat-form-field-outline-end {
-    @content;
-  }
+@mixin outline {
+    .mat-form-field-outline-start,
+    .mat-form-field-outline-gap,
+    .mat-form-field-outline-end {
+        @content;
+    }
 }
 
 // modify the Angular Material styles
 
- .app-container {
-
-  // remove the thick border and apply theme color to the selected input
-  .mat-form-field-appearance-outline .mat-form-field-outline-thick {
-    @include outline {
-      border-width: 1px;
-      color: $theme-color;
+.app-container {
+    // remove the thick border and apply theme color to the selected input
+    .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+        @include outline {
+            border-width: 1px;
+            color: $theme-color;
+        }
     }
-  }
 
-  // apply a border color for an invalid field
-  .mat-form-field-appearance-outline.mat-form-field-invalid {
-    @include outline {
-      color: #f44336;
+    // apply a border color for an invalid field
+    .mat-form-field-appearance-outline.mat-form-field-invalid {
+        @include outline {
+            color: $color-error;
+        }
     }
-  }
 
-  // adjust input height
-  .mat-form-field-appearance-outline .mat-form-field-infix {
-    padding: 0.7em;
-    margin-top: -.5em;
-  }
+    // used for incorrect credentials error
+    .error {
+        .mat-form-field-appearance-outline,
+        .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+            @include outline {
+                color: $color-error;
+            }
+        }
 
-  .mat-form-field-subscript-wrapper {
-    position: relative !important;
-  }
+        .mat-form-field-label {
+            color: $color-error;
+        }
+    }
 
-  .mat-form-field-appearance-outline .mat-form-field-wrapper {
-    margin: 0;
-  }
+    // adjust input height
+    .mat-form-field-appearance-outline .mat-form-field-infix {
+        padding: 0.7em;
+        margin-top: -.5em;
+    }
 
-  // remove the bottom padding from the last form field
-  .mat-form-field-last-child.mat-form-field-appearance-outline .mat-form-field-wrapper {
-    padding: 0;
-  }
+    .mat-form-field-subscript-wrapper {
+        position: relative !important;
+    }
 
-  .forgot-password-link {
-    margin-bottom: 1.5em;
-    text-align: right;
-    cursor: pointer;
-  }
+    // remove bottom padding
+    .mat-form-field-appearance-outline .mat-form-field-wrapper {
+        padding: 0;
+    }
+
+    // remove bottom margin
+    .mat-form-field-subscript-wrapper {
+        margin: 0;
+    }
+
+    // mat-error {
+    //     margin-bottom: 2rem;
+    // }
+
+    form {
+        width: 30rem;
+    }
 }

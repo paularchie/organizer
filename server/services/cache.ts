@@ -24,6 +24,7 @@ export async function applyCaching(req, res, next) {
 
     // if caching not required, just execute query as normal
     if (!this.useCache) {
+      console.log('no cache')
       return exec.apply(this, arguments);
     }
 
@@ -34,14 +35,14 @@ export async function applyCaching(req, res, next) {
 
 
     // if so, get the document and return it
-    if (cacheValue) {
-      console.log('from cache')
-      const doc = JSON.parse(cacheValue);
+    // if (cacheValue) {
+    //   console.log('from cache')
+    //   const doc = JSON.parse(cacheValue);
 
-      return Array.isArray(doc)
-        ? doc.map(d => new this.model(d))
-        : new this.model(doc);
-    }
+    //   return Array.isArray(doc)
+    //     ? doc.map(d => new this.model(d))
+    //     : new this.model(doc);
+    // }
 
     // otherwise issue the query and store the result in redis
     const result = await exec.apply(this, arguments);

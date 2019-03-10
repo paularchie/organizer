@@ -1,0 +1,7 @@
+<ng-container [formGroup]="group">
+  <mat-form-field appearance="outline" style="width: 100%">
+    <mat-label>{{props.label}}</mat-label>
+    <input matInput type="text" formControlName={{props.name}}/>
+  </mat-form-field>
+  <form-control-errors *ngIf="control.touched && control.errors" [errors]="control.errors"></form-control-errors>
+</ng-container>

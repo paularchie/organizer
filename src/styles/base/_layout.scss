@@ -1,0 +1,21 @@
+.main-content {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+
+    @include respond-min($breakpoint-1) {
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+}
+
+.heading-main {
+    margin-top: 0.5rem;
+
+    @include respond-min($breakpoint-1) {
+        margin-top: 1rem;
+    }
+}
+
+p{
+    margin-top: 1rem;
+}

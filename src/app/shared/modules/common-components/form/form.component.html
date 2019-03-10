@@ -1,0 +1,8 @@
+<div fxLayoutAlign="center">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" fxLayout="column">
+
+    <app-form-control *ngFor="let prop of properties" [group]="form" [props]="prop"></app-form-control>
+
+    <button mat-flat-button color="primary" class="btn btn-primary float-right" type="submit" [disabled]="isFormValid ? !(isFormValid() && form.valid) : !form.valid">Login</button>
+  </form>
+</div>

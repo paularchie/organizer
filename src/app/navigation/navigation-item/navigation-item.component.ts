@@ -15,7 +15,6 @@ export class NavigationItemComponent implements OnInit {
 
   ngOnInit() {
 
-    console.log('props', this.props);
   }
 
 }

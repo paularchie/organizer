@@ -12,6 +12,7 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary" class="header mat-elevation-z10">
 
+
       <mat-nav-list *ngIf="!isSmallScreen()">
         <ng-container *ngFor="let item of headerItems">
           <navigation-item [props]="item"></navigation-item>
@@ -25,7 +26,9 @@
     </mat-toolbar>
 
     <!-- main content goes here -->
-    <router-outlet></router-outlet>
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
 
   </mat-sidenav-content>
 

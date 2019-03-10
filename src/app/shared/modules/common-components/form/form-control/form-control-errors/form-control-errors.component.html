@@ -1,0 +1,17 @@
+<mat-error *ngIf="errors">
+
+    <ng-container *ngFor="let error of errors | keyvalue">
+
+        <ng-container *ngIf="isArray(error.value); else template;">
+            <div *ngFor="let errorCode of error.value">
+                {{errorMap[error.key][errorCode]}}
+            </div>
+        </ng-container>
+
+        <ng-template #template>
+            <div>{{errorMap[error.key]}}</div>
+        </ng-template>
+
+    </ng-container>
+
+</mat-error>

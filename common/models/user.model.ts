@@ -12,3 +12,8 @@ export interface NewUser extends User {
     password: string;
     confirmPassword: string;
 }
+
+export interface LoginCredentials {
+    email: string;
+    password: string;
+}
