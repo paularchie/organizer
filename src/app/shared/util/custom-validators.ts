@@ -1,55 +1,66 @@
-import { AbstractControl } from '@angular/forms';
-import { validatePassword } from './validate-password';
+import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
+import { EMAIL_REGEX } from '../constants';
+import { FormErrorTypes } from '../../auth/shared/enums/form-error-types.enum';
 import { Observable, timer } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { validatePassword } from './validate-password';
+import {
+    map,
+    merge,
+    switchMap,
+} from 'rxjs/operators';
 
-function required(control: AbstractControl): { [key: string]: boolean } | null {
 
-    return !(control.value && control.value.trim()) ? { 'required': true } : null;
+export const required = (control: AbstractControl): { [key: string]: boolean } | null =>
+    !(control.value && control.value.trim()) ? { [FormErrorTypes.required]: true } : null;
+
+
+export const email = (control: AbstractControl): { [key: string]: boolean } | null =>
+    !(new RegExp(EMAIL_REGEX).test(control.value)) && control.value && control.value.trim() ?
+        { [FormErrorTypes.email]: true } : null;
+
+export const passwordSecurity = (control: AbstractControl): { [key: string]: string[] } | null => {
+    const errors = control.value ? validatePassword(control.value) : [];
+    return errors.length ? { [FormErrorTypes.passwordSecurity]: errors } : null;
 }
 
-function passwordSecurity(control: AbstractControl): { [key: string]: string[] } | null {
-    const errors = validatePassword(control.value);
+export const passwordMatch = (passwordFieldName: string, confirmPasswordFieldName: string): AsyncValidatorFn =>
+    (control: AbstractControl): Promise<{} | null> => {
+        const form = control.parent;
+        const password = form.get(passwordFieldName);
+        const confirmPassword = form.get(confirmPasswordFieldName);
 
-    return errors.length ? { 'passwordSecurity': errors } : null;
-}
+        if(!password) {
+            throw new Error(`No matching control name '${password}!'`);
+        }
 
-function passwordMatch(): {} | null {
-    let match = false;
+        if(!confirmPassword) {
+            throw new Error(`No matching control name '${confirmPassword}!'`);
+        }
 
-    if (this.form) {
-        match = this.password.value === this.confirmPassword.value;
+        const mergedStreams = password.valueChanges.pipe(merge(confirmPassword.valueChanges));
+
+        return new Promise(resolve =>
+            mergedStreams.subscribe(() =>
+                resolve(password.value !== confirmPassword.value ? { [FormErrorTypes.passwordMatch]: true } : null)));
     }
 
-    return !match ? { 'passwordMatch': true } : null;
-}
-
-function duplicateField(props: any) {
-    return function (control: AbstractControl): Observable<{} | null> {
-
+export const duplicateField = (props: any): AsyncValidatorFn =>
+    (control: AbstractControl): Observable<{} | null> => {
         const httpMethod$ = props.httpMethod({
             prop: props.field,
             value: control.value.trim()
         });
 
+        const errorType: FormErrorTypes | null =
+            props.field === 'username' ? FormErrorTypes.duplicateUsername :
+                props.field === 'email' ? FormErrorTypes.duplicateEmail : null;
+
         return timer(400).pipe(switchMap(() => httpMethod$.pipe(
-            map(duplicate => duplicate ? ({ duplicate }) : null))
+            map(duplicate => duplicate ? { [errorType!]: true } : null))
         ));
+    }
 
-    };
-}
 
-export {
-    required,
-    passwordSecurity,
-    passwordMatch,
-    duplicateField
-};
 
-export default {
-    required,
-    passwordSecurity,
-    passwordMatch,
-    duplicateField
-};
+
 

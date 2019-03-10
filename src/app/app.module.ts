@@ -1,31 +1,37 @@
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Actions, EffectsModule } from '@ngrx/effects';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { FlexLayoutModule } from '@angular/flex-layout';
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AccountModule } from './account/account.module';
-import { MaterialModule } from './shared/modules/material.module';
-import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NavigationComponent } from './navigation/navigation.component';
-import { NotesModule } from './notes/notes.module';
-import { AuthService } from './shared/services/auth.service';
+import { AppState, metaReducers, reducers } from './reducers';
+import { AuthenticationGuard } from './shared/guards/authentication.guard';
+import { AuthModule } from './auth/auth.module';
 import { AuthorizationGuard } from './shared/guards/authorization.guard';
-import { Router } from '@angular/router';
-import { RbacAllowDirective } from './shared/directives/rbac-allow.directive';
+import { AuthService } from './shared/services/auth.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { environment } from '../environments/environment';
+import { HTTP_INTERCEPTORS, HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
+import { Interceptor } from './shared/http-interceptor';
+import { MaterialModule } from './shared/modules/material.module';
+import { NavigationComponent } from './navigation/navigation.component';
 import { NavigationItemComponent } from './navigation/navigation-item/navigation-item.component';
+import { NotesModule } from './notes/notes.module';
+import { RbacAllowDirective } from './shared/directives/rbac-allow.directive';
+import { Router } from '@angular/router';
+import { State, StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { UserRoles } from './shared/constants';
 import { UsersModule } from './users/users.module';
-import { Interceptor } from './shared/http-interceptor';
-import { ErrorPageComponent } from './shared/components/error-page/error-page.component';
+import { ErrorPageComponent } from './shared/modules/common-components/error-page/error-page.component';
 
 
-require('hammerjs');
+export function createAdminOnlyGuard(router: Router, store: State<AppState>) {
+  debugger
+  return new AuthorizationGuard([UserRoles.ADMIN], router, store);
+}
 
-export function createAdminOnlyGuard(authService: AuthService, router: Router) {
-  return new AuthorizationGuard([UserRoles.ADMIN], authService, router);
+export function createAuthenicationGuard(store: State<AppState>, router: Router) {
+  return new AuthenticationGuard(store, router);
 }
 
 @NgModule({
@@ -42,10 +48,8 @@ export function createAdminOnlyGuard(authService: AuthService, router: Router) {
     BrowserAnimationsModule,
     BrowserModule,
     MaterialModule,
-    FlexLayoutModule,
-    FormsModule,
     AppRoutingModule,
-    AccountModule,
+    AuthModule,
     NotesModule,
     UsersModule,
     HttpClientModule,
@@ -53,22 +57,42 @@ export function createAdminOnlyGuard(authService: AuthService, router: Router) {
       cookieName: 'XSRF-COOKIE',
       headerName: 'x-xsrf-token'
     }),
+    StoreModule.forRoot(reducers, { metaReducers }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    EffectsModule.forRoot([]),
+
+    // StoreRouterConnectingModule.forRoot({ stateKey: 'router' })
+
   ],
   providers: [
+    AuthService,
     {
       provide: 'adminOnlyGuard',
       useFactory: createAdminOnlyGuard,
       deps: [
+        Router,
+        State,
         AuthService,
-        Router
       ]
     },
+    {
+      provide: 'authenticationGuard',
+      useFactory: createAuthenicationGuard,
+      deps: [
+        State,
+        Router
+      ],
+    },
+    Actions,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: Interceptor,
       multi: true
-    }
+    },
+    // { provide: RouterStateSerializer, useClass: CustomSerializer },
+
   ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

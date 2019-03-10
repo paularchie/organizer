@@ -1,0 +1,10 @@
+<div *ngIf="credentialsError">Incorrect Credentials</div>
+
+<div class="form-wrapper" [ngClass]="{'error' : credentialsError}">
+  <app-form #form [props]="properties" [isFormValid]="isFormValid.bind(this)" (onSubmit)="handleSubmit($event)"></app-form>
+</div>
+
+
+
+
+

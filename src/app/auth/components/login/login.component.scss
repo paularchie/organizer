@@ -1,0 +1,14 @@
+.login-form-wrapper {
+    margin-top: 15rem;
+
+    .forgot-password-link {
+        cursor: pointer;
+        float: right;
+    }
+
+    app-form-control {
+        &:nth-child(2) {
+            margin: 0;
+        }
+    }
+}
