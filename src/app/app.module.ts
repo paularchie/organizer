@@ -24,6 +24,8 @@ import { UserRoles } from './shared/constants';
 import { UsersModule } from './users/users.module';
 import { ErrorPageComponent } from './shared/modules/common-components/error-page/error-page.component';
 
+import { ToastrModule } from 'ngx-toastr';
+
 
 export function createAdminOnlyGuard(router: Router, store: State<AppState>) {
   debugger
@@ -48,6 +50,7 @@ export function createAuthenicationGuard(store: State<AppState>, router: Router)
     BrowserAnimationsModule,
     BrowserModule,
     MaterialModule,
+    ToastrModule.forRoot(), // ToastrModule added
     AppRoutingModule,
     AuthModule,
     NotesModule,

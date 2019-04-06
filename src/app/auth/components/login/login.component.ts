@@ -5,6 +5,7 @@ import { FormControlProps } from '../../shared/models/form-control-props.model';
 import { FormControlTypes } from '../../shared/enums/form-control-types.enum';
 import { required } from '../../../shared/util/custom-validators';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -18,12 +19,13 @@ export class LoginComponent implements Form, OnInit {
   private pending: boolean;
   credentialsError: boolean;
 
-  constructor(private facade: AuthFacade) { }
+  constructor(private facade: AuthFacade, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.facade.credentialsErrors$.subscribe(() => {
       this.pending = false;
       this.credentialsError = true;
+      this.toastr.error('Incorrect Credentials');
     });
   }
 
